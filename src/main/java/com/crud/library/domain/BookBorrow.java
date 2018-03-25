@@ -14,7 +14,7 @@ public class BookBorrow {
     @Column(name = "ID", unique = true)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOOK_COPY_ID")
     private BookCopy bookCopy;
 

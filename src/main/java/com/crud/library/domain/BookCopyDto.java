@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 
 @Getter
 @Setter
@@ -15,5 +17,5 @@ public class BookCopyDto {
     private Long id;
     private BookTitle bookTitle;
     private String status;
-    private BookBorrow bookBorrow;
+    private Set<BookBorrow> bookBorrow;
 }

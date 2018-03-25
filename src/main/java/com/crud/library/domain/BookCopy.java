@@ -21,8 +21,8 @@ public class BookCopy {
     @Column(name = "STATUS")
     private String status;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "bookCopy")
-    private BookBorrow bookBorrow;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bookCopy")
+    private Set<BookBorrow> bookBorrow;
 
     public BookCopy(){};
 
@@ -31,7 +31,7 @@ public class BookCopy {
         this.status = status;
     }
 
-    public BookCopy(Long id, BookTitle bookTitle, String status, BookBorrow bookBorrow) {
+    public BookCopy(Long id, BookTitle bookTitle, String status, Set<BookBorrow> bookBorrow) {
         this.id = id;
         this.bookTitle = bookTitle;
         this.status = status;
@@ -50,7 +50,7 @@ public class BookCopy {
         return status;
     }
 
-    public BookBorrow getBookBorrow() {
+    public Set<BookBorrow> getBookBorrow() {
         return bookBorrow;
     }
 
