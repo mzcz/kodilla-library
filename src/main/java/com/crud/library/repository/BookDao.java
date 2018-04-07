@@ -2,11 +2,13 @@ package com.crud.library.repository;
 
 import com.crud.library.domain.BookBorrowDto;
 import com.crud.library.domain.BookCopyDto;
+import com.crud.library.domain.BooksBorrowedDto;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.math.BigInteger;
+import java.util.List;
 
 @Repository
 public class BookDao {
@@ -31,4 +33,21 @@ public class BookDao {
 
         return (BookBorrowDto) em.createNativeQuery(SearchQuery, BookBorrowDto.class);
     }
+
+
+    @SuppressWarnings("unchecked")
+    public List<BooksBorrowedDto> booksBorrowedByReaders(){
+
+        String SearchQuery = "select  bb.id, b.title, concat (r.first_name,\" \", r.last_name) as name\n" +
+                " from library_crud.bookborrows bb\n" +
+                "join library_crud.bookcopies bc on bc.id = bb.book_copy_id\n" +
+                "join library_crud.books b on b.id = bc.book_id\n" +
+                "join library_crud.readers r on r.id = bb.reader_id \n" +
+                "where bb.return_date is null \n" +
+                "and bc.status='borrowed'";
+
+        return em.createNativeQuery(SearchQuery,BooksBorrowedDto.class).getResultList();
+
+    };
+
 }

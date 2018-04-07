@@ -18,6 +18,7 @@ import static com.crud.library.domain.BookCopyStatus.BORROWED;
 import static com.crud.library.domain.BookCopyStatus.FREE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("v1/")
 public class LibraryController {
@@ -39,27 +40,36 @@ public class LibraryController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/readers")
     public List<ReaderDto> getReaders(){
-        return readerMapper.mapToReaderDtoList(service.getAllReaders());
+        return readerMapper.
+                mapToReaderDtoList(service.getAllReaders());
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/readers", consumes = APPLICATION_JSON_VALUE)
     public ReaderDto createReader (@RequestBody ReaderDto readerDto){
-        return readerMapper.mapToReaderDto(service.save(readerMapper.mapToReader(readerDto)));
+        return readerMapper
+                .mapToReaderDto(service
+                        .save(readerMapper.mapToReader(readerDto)));
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/titles", consumes = APPLICATION_JSON_VALUE)
     public BookTitleDto createBookTitle (@RequestBody BookTitleDto bookTitleDto){
-        return bookTitleMapper.mapToBookTitleDto(service.save(bookTitleMapper.mapToBookTitle(bookTitleDto)));
+        return bookTitleMapper
+                .mapToBookTitleDto(service
+                        .save(bookTitleMapper.mapToBookTitle(bookTitleDto)));
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/bookCopy", consumes = APPLICATION_JSON_VALUE)
     public BookCopyDto createBookCopy (@RequestBody BookCopyDto bookCopyDto){
-        return bookCopyMapper.mapToBookCopyDto(service.save(bookCopyMapper.mapToBookCopy(bookCopyDto)));
+        return bookCopyMapper
+                .mapToBookCopyDto(service
+                        .save(bookCopyMapper.mapToBookCopy(bookCopyDto)));
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/updateBookCopy")
     public void updateBookCopy(@RequestBody BookCopyDto bookCopyDto){
-           bookCopyMapper.mapToBookCopyDto(service.save(bookCopyMapper.mapToBookCopy(bookCopyDto)));
+           bookCopyMapper
+                   .mapToBookCopyDto(service
+                           .save(bookCopyMapper.mapToBookCopy(bookCopyDto)));
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getFreeBookCopies/{bookId}")
@@ -71,13 +81,16 @@ public class LibraryController {
     public BookBorrowDto createBookBorrow (@RequestBody BookBorrowDto bookBorrowDto){
 
         BookCopy bookCopy = bookBorrowDto.getBookCopy();
-        Integer myInteger = 0;
-        BigInteger excpeted = BigInteger.valueOf(myInteger.intValue());
+        BigInteger excpeted = BigInteger.valueOf(0);
 
-        if (service.getAllAvialableBookCopies(bookCopy.getBookTitle().getId()) != excpeted) {
+        boolean avialableBook = (service.getAllAvialableBookCopies(bookCopy.getBookTitle().getId()) != excpeted)?true:false;
+
+        if (avialableBook) {
             bookCopy.setStatus("borrowed");
             service.save(bookCopy);
-            return bookBorrowMapper.mapToBookBorrowDto(service.save(bookBorrowMapper.mapToBookBorrow(bookBorrowDto)));
+            return bookBorrowMapper
+                    .mapToBookBorrowDto(service
+                            .save(bookBorrowMapper.mapToBookBorrow(bookBorrowDto)));
         }
         return null;
     }
@@ -85,12 +98,19 @@ public class LibraryController {
     @RequestMapping(method = RequestMethod.PUT, value = "/returnBookCopy")
     public void updateReturnBookCopy(@RequestBody BookBorrowDto bookBorrowDto) {
 
-        bookBorrowMapper.mapToBookBorrowDto(service.save(bookBorrowMapper.mapToBookBorrow(bookBorrowDto)));
+        bookBorrowMapper
+                .mapToBookBorrowDto(service
+                        .save(bookBorrowMapper.mapToBookBorrow(bookBorrowDto)));
 
         BookCopy bookCopy = bookBorrowDto.getBookCopy();
         bookCopy.setStatus("free");
         service.save(bookCopy);
 
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/booksBorrowed")
+    public List<BooksBorrowedDto> getBooksBorrowedByReaders(){
+        return service.booksBorrowedByReaders();
     }
 
 }

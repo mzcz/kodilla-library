@@ -1,9 +1,7 @@
 package com.crud.library;
 
-import com.crud.library.domain.BookBorrow;
-import com.crud.library.domain.BookCopy;
-import com.crud.library.domain.BookTitle;
-import com.crud.library.domain.Reader;
+import com.crud.library.domain.*;
+import com.crud.library.repository.BookDao;
 import com.crud.library.service.DbService;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -126,5 +124,24 @@ public class LibraryDaoTestSuite {
         repository.delete(bookBorrow);
     }
 
+    @Test
+    public void BookBorrowedByUsersTest() {
+
+        //Given
+
+        //When
+
+        List<BooksBorrowedDto> listBorrowedBooks = repository.booksBorrowedByReaders();
+        for (BooksBorrowedDto list: listBorrowedBooks){
+            System.out.println(list.getId() + " " + list.getTitle() + " " + list.getName());
+        }
+
+        //Then
+
+
+        //Assert.assertEquals(bookId, bookTitle.getId());
+
+
+    }
 
 }

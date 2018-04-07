@@ -102,4 +102,8 @@ public class DbService {
         return bookDao.returnBorrowedBook(bookId);
     }
 
+    public List<BooksBorrowedDto> booksBorrowedByReaders(){
+        return bookDao.booksBorrowedByReaders();
+    }
+
 }
