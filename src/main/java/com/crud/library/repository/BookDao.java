@@ -52,7 +52,7 @@ public class BookDao {
     @SuppressWarnings("unchecked")
     public List<BooksBorrowedDto> booksBorrowedByReaders(){
 
-        String SearchQuery = "select  bb.id, b.title, concat (r.first_name,\" \", r.last_name) as name, \n" +
+        String SearchQuery = "select  bb.id, b.title, r.last_name as name, \n" +
                 " bb.reader_id as reader, bb.book_copy_id as book_copy, bc.book_id as book, \n" +
                 " bb.created_date, bb.return_date \n" +
                 " from bookborrows bb\n" +
