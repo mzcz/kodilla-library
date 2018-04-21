@@ -125,7 +125,7 @@ public class LibraryDaoTestSuite {
     }
 
     @Test
-    public void BookBorrowedByUsersTest() {
+    public void bookBorrowedByUsersTest() {
 
         //Given
 
@@ -134,6 +134,27 @@ public class LibraryDaoTestSuite {
         List<BooksBorrowedDto> listBorrowedBooks = repository.booksBorrowedByReaders();
         for (BooksBorrowedDto list: listBorrowedBooks){
             System.out.println(list.getId() + " " + list.getTitle() + " " + list.getName());
+        }
+
+        //Then
+
+
+        //Assert.assertEquals(bookId, bookTitle.getId());
+
+
+    }
+
+    @Test
+    public void booksAvialableToBorrow() {
+
+        //Given
+
+        //When
+
+        List<BooksAvialableToBorrow> listBooksToBorrow = repository.getAvialableBookCopies();
+        for (BooksAvialableToBorrow list: listBooksToBorrow){
+            System.out.println(list.getId() + " " + list.getAuthor() + " " + list.getTitle() +
+                    " " + list.getPublication_date() + " " + list.getCopy_id());
         }
 
         //Then

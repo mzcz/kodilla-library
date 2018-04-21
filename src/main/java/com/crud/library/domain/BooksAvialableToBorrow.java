@@ -7,29 +7,21 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class BooksBorrowedDto {
+public class BooksAvialableToBorrow {
 
     @Id
     private Long id;
 
+    private String author;
+
     private String title;
 
-    private String name;
+    private Long publication_date;
 
-    private Long reader;
-
-    private Long book_copy;
-
-    private Long book;
-
-    private LocalDate created_date;
-
-    private LocalDate return_date;
-
+    private Long copy_id;
 }

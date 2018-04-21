@@ -1,5 +1,6 @@
 package com.crud.library.service;
 
+import com.crud.library.controller.TaskNotFoundException;
 import com.crud.library.domain.*;
 import com.crud.library.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +71,11 @@ public class DbService {
         return bookCopyRepository.findAll();
     }
 
-    public BookCopy getBookCopy(final Long id){
+    public List<BooksAvialableToBorrow> getAvialableBookCopies(){
+        return bookDao.getAvialableBookCopies();
+    }
+
+    public BookCopy getBookCopy(final Long id) {
         return bookCopyRepository.findById(id).orElse(null);
     }
 
@@ -80,7 +85,7 @@ public class DbService {
 
     //change status
     public BigInteger getAllAvialableBookCopies(final Long bookId){
-        return bookDao.getAllAvialableBookCopies(bookId);
+        return bookDao.getAvialableBookCopies(bookId);
     }
 
     //BookBorrow

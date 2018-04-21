@@ -73,26 +73,36 @@ public class LibraryController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getFreeBookCopies/{bookId}")
-    public BigInteger getFreeBooksCopies(@PathVariable Long bookId) throws TaskNotFoundException {
+    public BigInteger getFreeBooksCopies(@PathVariable Long bookId) {
         return service.getAllAvialableBookCopies(bookId);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/bookBorrow", consumes = APPLICATION_JSON_VALUE)
-    public BookBorrowDto createBookBorrow (@RequestBody BookBorrowDto bookBorrowDto){
+    public BookBorrowDto createBookBorrow (@RequestBody BookBorrowDto bookBorrowDto) {
 
         BookCopy bookCopy = bookBorrowDto.getBookCopy();
-        BigInteger excpeted = BigInteger.valueOf(0);
+        //BigInteger excpeted = BigInteger.valueOf(0);
 
-        boolean avialableBook = (service.getAllAvialableBookCopies(bookCopy.getBookTitle().getId()) != excpeted)?true:false;
+       // boolean avialableBook = (service.getAvialableBookCopies(bookCopy.getBookTitle().getId()) != excpeted)?true:false;
 
-        if (avialableBook) {
-            bookCopy.setStatus("borrowed");
+        //if (avialableBook) {
+        //System.out.println("bookCopy.getBookTitle().getId() " + bookBorrowDto.getBookCopy().getId());
+        BookCopy bookCopies = service.getBookCopy(bookBorrowDto.getBookCopy().getId());
+        //System.out.println(bookCopies.getBookTitle().getId());
+
+        BookTitle bookTitle = service.getBookTitle(bookCopies.getBookTitle().getId());
+
+        bookCopy.setStatus("borrowed");
+            bookCopy.setBookTitle(bookTitle);
             service.save(bookCopy);
+
+        bookBorrowDto.setCreatedDate(LocalDate.now());
+
             return bookBorrowMapper
                     .mapToBookBorrowDto(service
                             .save(bookBorrowMapper.mapToBookBorrow(bookBorrowDto)));
-        }
-        return null;
+        //}
+        //return null;
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/returnBookCopy")
@@ -111,6 +121,11 @@ public class LibraryController {
     @RequestMapping(method = RequestMethod.GET, value = "/booksBorrowed")
     public List<BooksBorrowedDto> getBooksBorrowedByReaders(){
         return service.booksBorrowedByReaders();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/booksAvialable")
+    public List<BooksAvialableToBorrow> getAvialableBookCopies(){
+        return service.getAvialableBookCopies();
     }
 
 }

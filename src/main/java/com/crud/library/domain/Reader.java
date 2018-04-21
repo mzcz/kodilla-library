@@ -34,6 +34,7 @@ public class Reader {
 
     public Reader(){}
 
+
     public Reader(String firstName, String lastName, LocalDate createdDate) {
         this.firstName = firstName;
         this.lastName = lastName;

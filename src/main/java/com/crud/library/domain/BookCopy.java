@@ -57,4 +57,13 @@ public class BookCopy {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public void setBookTitle(BookTitle bookTitle) {
+        this.bookTitle = bookTitle;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
 }
