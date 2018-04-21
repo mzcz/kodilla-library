@@ -19,8 +19,8 @@ public class BookDao {
 
     public BigInteger getAvialableBookCopies(Long bookId){
 
-        String SearchQuery = "SELECT count(*)  FROM library_crud.bookcopies bc\n" +
-                "join library_crud.books b\n" +
+        String SearchQuery = "SELECT count(*)  FROM bookcopies bc\n" +
+                "join books b\n" +
                 "on b.id = bc.book_id\n" +
                 "where bc.status='free' and b.id = " + bookId;
 
@@ -33,16 +33,16 @@ public class BookDao {
 
         String SearchQuery = "select id, author, title, publication_date, copy_id from (                \n" +
                 "select b.*, \n" +
-                "(select min(bc.id) from library_crud.bookcopies bc where bc.book_id = b.id\n" +
+                "(select min(bc.id) from bookcopies bc where bc.book_id = b.id\n" +
                 "and bc.status='free'\n" +
-                ") copy_id  from library_crud.books b) t where t.copy_id is not null;   ";
+                ") copy_id  from books b) t where t.copy_id is not null;   ";
 
         return em.createNativeQuery(SearchQuery,BooksAvialableToBorrow.class).getResultList();
 
     };
 
     public BookBorrowDto returnBorrowedBook(Long bookCopyId){
-        String SearchQuery = "select * FROM library_crud.bookborrows  where book_copy_id = " +
+        String SearchQuery = "select * FROM bookborrows  where book_copy_id = " +
                 + bookCopyId + " and return_date is null";
 
         return (BookBorrowDto) em.createNativeQuery(SearchQuery, BookBorrowDto.class);
@@ -55,10 +55,10 @@ public class BookDao {
         String SearchQuery = "select  bb.id, b.title, concat (r.first_name,\" \", r.last_name) as name, \n" +
                 " bb.reader_id as reader, bb.book_copy_id as book_copy, bc.book_id as book, \n" +
                 " bb.created_date, bb.return_date \n" +
-                " from library_crud.bookborrows bb\n" +
-                "join library_crud.bookcopies bc on bc.id = bb.book_copy_id\n" +
-                "join library_crud.books b on b.id = bc.book_id\n" +
-                "join library_crud.readers r on r.id = bb.reader_id \n" +
+                " from bookborrows bb\n" +
+                "join bookcopies bc on bc.id = bb.book_copy_id\n" +
+                "join books b on b.id = bc.book_id\n" +
+                "join readers r on r.id = bb.reader_id \n" +
                 "where bb.return_date is null \n" +
                 "and bc.status='borrowed'" +
                 "order by bb.id asc ";
