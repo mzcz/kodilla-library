@@ -31,11 +31,13 @@ public class BookDao {
     @SuppressWarnings("unchecked")
     public List<BooksAvialableToBorrow> getAvialableBookCopies(){
 
-        String SearchQuery = "select id, author, title, publication_date, copy_id from (                \n" +
+        String SearchQuery = "select id, author, title, publication_date, copy_id, free_books from (                \n" +
                 "select b.*, \n" +
-                "(select min(bc.id) from bookcopies bc where bc.book_id = b.id\n" +
+                "(select min(bc.id) from library_crud.bookcopies bc where bc.book_id = b.id\n" +
                 "and bc.status='free'\n" +
-                ") copy_id  from books b) t where t.copy_id is not null;   ";
+                ") copy_id, (select count(1) from library_crud.bookcopies bc where \n" +
+                "bc.book_id = b.id and bc.status='free') as free_books from library_crud.books b) t\n" +
+                " where t.copy_id is not null;";
 
         return em.createNativeQuery(SearchQuery,BooksAvialableToBorrow.class).getResultList();
 

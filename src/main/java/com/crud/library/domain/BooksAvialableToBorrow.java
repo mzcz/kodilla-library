@@ -24,4 +24,6 @@ public class BooksAvialableToBorrow {
     private Long publication_date;
 
     private Long copy_id;
+
+    private Long free_books;
 }
