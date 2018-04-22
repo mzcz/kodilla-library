@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.List;
@@ -78,7 +79,14 @@ public class LibraryController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/bookBorrow", consumes = APPLICATION_JSON_VALUE)
-    public BookBorrowDto createBookBorrow (@RequestBody BookBorrowDto bookBorrowDto) {
+    public BookBorrowDto createBookBorrow (@RequestBody BookBorrowDto bookBorrowDto) throws Exception {
+
+        BigInteger verifyData = service.getIfSameBookIsBorrowedByReader(bookBorrowDto.getReader().getId(), bookBorrowDto.getBookCopy().getId());
+        System.out.println(" verifyData " + verifyData);
+
+        if (verifyData.intValue() > 0 ) {
+            throw new Exception("Something bad happened.");
+        }
 
         BookCopy bookCopy = bookBorrowDto.getBookCopy();
         //BigInteger excpeted = BigInteger.valueOf(0);
@@ -126,6 +134,11 @@ public class LibraryController {
     @RequestMapping(method = RequestMethod.GET, value = "/booksAvialable")
     public List<BooksAvialableToBorrow> getAvialableBookCopies(){
         return service.getAvialableBookCopies();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getSameBookCopies/{readerId},{bookCopyId}")
+    public BigInteger getSameBooksCopies(@PathVariable Long readerId, @PathVariable Long bookCopyId) {
+        return service.getIfSameBookIsBorrowedByReader(readerId, bookCopyId);
     }
 
 }

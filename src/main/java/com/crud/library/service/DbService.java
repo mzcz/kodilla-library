@@ -111,4 +111,9 @@ public class DbService {
         return bookDao.booksBorrowedByReaders();
     }
 
+    //check if reader borrow already book
+    public BigInteger getIfSameBookIsBorrowedByReader(Long readerId, Long bookCopyId){
+        return bookDao.getIfBookIsBorrowedByReader(readerId, bookCopyId);
+    }
+
 }

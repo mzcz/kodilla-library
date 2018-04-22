@@ -28,6 +28,24 @@ public class BookDao {
 
     };
 
+    public BigInteger getIfBookIsBorrowedByReader(Long readerId, Long bookCopyId){
+
+        String SearchQuery = "select count(1) as id from (select  bb.id, b.title, r.last_name as name, \n" +
+                " bb.reader_id as reader, bb.book_copy_id as book_copy, bc.book_id as book, \n" +
+                " bb.created_date, bb.return_date \n" +
+                " from bookborrows bb\n" +
+                "join bookcopies bc on bc.id = bb.book_copy_id\n" +
+                "join books b on b.id = bc.book_id\n" +
+                "join readers r on r.id = bb.reader_id \n" +
+                "where bb.return_date is null \n" +
+                "and bc.status='borrowed' \n" +
+                "and bb.reader_id= " + readerId + "" +
+                " and bc.book_id = (SELECT book_id FROM bookcopies where id= " + bookCopyId + ")) a;";
+
+        return (BigInteger) em.createNativeQuery(SearchQuery).getSingleResult();
+
+    };
+
     @SuppressWarnings("unchecked")
     public List<BooksAvialableToBorrow> getAvialableBookCopies(){
 
