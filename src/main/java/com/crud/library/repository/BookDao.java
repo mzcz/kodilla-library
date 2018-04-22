@@ -33,10 +33,10 @@ public class BookDao {
 
         String SearchQuery = "select id, author, title, publication_date, copy_id, free_books from (                \n" +
                 "select b.*, \n" +
-                "(select min(bc.id) from library_crud.bookcopies bc where bc.book_id = b.id\n" +
+                "(select min(bc.id) from bookcopies bc where bc.book_id = b.id\n" +
                 "and bc.status='free'\n" +
-                ") copy_id, (select count(1) from library_crud.bookcopies bc where \n" +
-                "bc.book_id = b.id and bc.status='free') as free_books from library_crud.books b) t\n" +
+                ") copy_id, (select count(1) from bookcopies bc where \n" +
+                "bc.book_id = b.id and bc.status='free') as free_books from books b) t\n" +
                 " where t.copy_id is not null;";
 
         return em.createNativeQuery(SearchQuery,BooksAvialableToBorrow.class).getResultList();
